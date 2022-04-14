@@ -52,7 +52,35 @@ public class ShakespeareanController {
             e.printStackTrace();
             return "";
         }
+    }
 
+    // Get particular pokemon response
+    @GetMapping("/pokemon/translated/{name}")
+    String printTranslatedPokemon(@PathVariable String name) throws JsonProcessingException {
+        String uri = "https://pokeapi.co/api/v2/pokemon-species/" + name;
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<JsonNode> response = restTemplate.exchange(uri, HttpMethod.GET, null, JsonNode.class);
+        JsonNode map = response.getBody();
+
+        String description =  map.get("flavor_text_entries").get(0).get("flavor_text").asText();
+        String shakespeareanUri = "https://api.funtranslations.com/translate/shakespeare.json?text="+description;
+        ResponseEntity<JsonNode> responseEntityStr = restTemplate.postForEntity(shakespeareanUri, null, JsonNode.class);
+
+        System.out.println(responseEntityStr);
+
+        String habitat = map.get("habitat").asText();
+        String is_legendary = map.get("is_legendary").asText();
+
+        PokemonResponse pokemonResponse = new PokemonResponse(name, description, habitat, is_legendary);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(pokemonResponse);
+            return json;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     /*
