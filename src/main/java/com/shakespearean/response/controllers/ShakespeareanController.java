@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shakespearean.response.services.PokemonDescription;
+import com.shakespearean.response.services.PokemonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,22 @@ public class ShakespeareanController {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<JsonNode> response = restTemplate.exchange(uri, HttpMethod.GET, null, JsonNode.class);
         JsonNode map = response.getBody();
-        String res =  map.get("flavor_text_entries").get(0).get("flavor_text").asText();
-        return res;
+
+        String description =  map.get("flavor_text_entries").get(0).get("flavor_text").asText();
+        String habitat = map.get("habitat").asText();
+        String is_legendary = map.get("is_legendary").asText();
+
+        PokemonResponse pokemonResponse = new PokemonResponse(name, description, habitat, is_legendary);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(pokemonResponse);
+            return json;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "";
+        }
+
     }
 
     /*
