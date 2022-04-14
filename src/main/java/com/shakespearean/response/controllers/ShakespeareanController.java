@@ -1,9 +1,17 @@
 package com.shakespearean.response.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shakespearean.response.services.PokemonDescription;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The ShakespeareanController, given a pokemon name, returns a "shakespearean" response.
@@ -12,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 public class ShakespeareanController {
 
 
-    @Autowired
+    //@Autowired
     //private PokemonDescription pokemonDescription;
 
     // Get all pokemon responses
@@ -23,12 +31,13 @@ public class ShakespeareanController {
 
     // Get particular pokemon response
     @GetMapping("/pokemon/{name}")
-    void printPokemon(@PathVariable String name) {
+    String printPokemon(@PathVariable String name) throws JsonProcessingException {
         String uri = "https://pokeapi.co/api/v2/pokemon-species/" + name;
         RestTemplate restTemplate = new RestTemplate();
-        Object result = restTemplate.getForObject(uri,Object.class);
-        System.out.println(result);
-        return;
+        ResponseEntity<JsonNode> response = restTemplate.exchange(uri, HttpMethod.GET, null, JsonNode.class);
+        JsonNode map = response.getBody();
+        String res =  map.get("flavor_text_entries").get(0).get("flavor_text").asText();
+        return res;
     }
 
     /*
