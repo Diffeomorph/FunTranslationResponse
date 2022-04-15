@@ -3,7 +3,9 @@ package com.shakespearean.response.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shakespearean.response.services.PokemonRequest;
 import com.shakespearean.response.services.PokemonResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +21,8 @@ import java.nio.charset.StandardCharsets;
 public class ShakespeareanController {
 
 
-    //@Autowired
-    //private PokemonDescription pokemonDescription;
+    @Autowired
+    private PokemonRequest pokemonRequest;
 
     // Get all pokemon responses
     @GetMapping("/pokemon")
@@ -31,19 +33,9 @@ public class ShakespeareanController {
     // Get particular pokemon response
     @GetMapping("/pokemon/{name}")
     String getPokemon(@PathVariable String name) throws JsonProcessingException {
-        String uri = "https://pokeapi.co/api/v2/pokemon-species/" + name;
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<JsonNode> response = restTemplate.exchange(uri, HttpMethod.GET, null, JsonNode.class);
-        JsonNode map = response.getBody();
+        String[] res = pokemonRequest.getPokemonbyName(name);
 
-        String description =  map.get("flavor_text_entries").get(0).get("flavor_text").asText();
-        description = description.replace("\n", " ");
-        description = description.replace("\f", " ");
-        System.out.println(map.get("flavor_text_entries").get(0).get("flavor_text"));
-        String habitat = map.get("habitat").asText();
-        String is_legendary = map.get("is_legendary").asText();
-
-        PokemonResponse pokemonResponse = new PokemonResponse(name, description, habitat, is_legendary);
+        PokemonResponse pokemonResponse = new PokemonResponse(res[0], res[1], res[2], res[3]);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -58,24 +50,15 @@ public class ShakespeareanController {
     // Get particular pokemon response
     @GetMapping("/pokemon/translated/{name}")
     String getTranslatedPokemon(@PathVariable String name) throws JsonProcessingException {
-        String uri = "https://pokeapi.co/api/v2/pokemon-species/" + name;
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<JsonNode> response = restTemplate.exchange(uri, HttpMethod.GET, null, JsonNode.class);
-        JsonNode map = response.getBody();
+        String[] res = pokemonRequest.getPokemonbyName(name);
 
-        String description =  map.get("flavor_text_entries").get(0).get("flavor_text").asText();
-        description = description.replace("\n", " ");
-        description = description.replace("\f", " ");
-
-        String shakespeareanUri = "https://api.funtranslations.com/translate/shakespeare.json?text="+ URLEncoder.encode(description, StandardCharsets.UTF_8);
-        ResponseEntity<JsonNode> res = restTemplate.exchange(shakespeareanUri, HttpMethod.POST, null, JsonNode.class);
-        JsonNode map2 = res.getBody();
+        RestTemplate restTemplate2 = new RestTemplate();
+        String shakespeareanUri = "https://api.funtranslations.com/translate/shakespeare.json?text="+ URLEncoder.encode(res[1], StandardCharsets.UTF_8);
+        ResponseEntity<JsonNode> resShakespeare = restTemplate2.exchange(shakespeareanUri, HttpMethod.POST, null, JsonNode.class);
+        JsonNode map2 = resShakespeare.getBody();
         String descriptionTranslated = map2.get("contents").get("translated").asText();
 
-        String habitat = map.get("habitat").asText();
-        String is_legendary = map.get("is_legendary").asText();
-
-        PokemonResponse pokemonResponse = new PokemonResponse(name, descriptionTranslated, habitat, is_legendary);
+        PokemonResponse pokemonResponse = new PokemonResponse(res[0], descriptionTranslated, res[2], res[3]);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
