@@ -3,16 +3,14 @@ package com.shakespearean.response.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shakespearean.response.services.PokemonDescription;
 import com.shakespearean.response.services.PokemonResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The ShakespeareanController, given a pokemon name, returns a "shakespearean" response.
@@ -32,7 +30,7 @@ public class ShakespeareanController {
 
     // Get particular pokemon response
     @GetMapping("/pokemon/{name}")
-    String printPokemon(@PathVariable String name) throws JsonProcessingException {
+    String getPokemon(@PathVariable String name) throws JsonProcessingException {
         String uri = "https://pokeapi.co/api/v2/pokemon-species/" + name;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<JsonNode> response = restTemplate.exchange(uri, HttpMethod.GET, null, JsonNode.class);
@@ -56,22 +54,22 @@ public class ShakespeareanController {
 
     // Get particular pokemon response
     @GetMapping("/pokemon/translated/{name}")
-    String printTranslatedPokemon(@PathVariable String name) throws JsonProcessingException {
+    String getTranslatedPokemon(@PathVariable String name) throws JsonProcessingException {
         String uri = "https://pokeapi.co/api/v2/pokemon-species/" + name;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<JsonNode> response = restTemplate.exchange(uri, HttpMethod.GET, null, JsonNode.class);
         JsonNode map = response.getBody();
 
         String description =  map.get("flavor_text_entries").get(0).get("flavor_text").asText();
-        String shakespeareanUri = "https://api.funtranslations.com/translate/shakespeare.json?text="+description;
-        ResponseEntity<JsonNode> responseEntityStr = restTemplate.postForEntity(shakespeareanUri, null, JsonNode.class);
-
-        System.out.println(responseEntityStr);
+        String shakespeareanUri = "https://api.funtranslations.com/translate/shakespeare.json?text="+ URLEncoder.encode(description, StandardCharsets.UTF_8);
+        ResponseEntity<JsonNode> res = restTemplate.exchange(shakespeareanUri, HttpMethod.POST, null, JsonNode.class);
+        JsonNode map2 = res.getBody();
+        String descriptionTranslated = map2.get("contents").get("translated").asText();
 
         String habitat = map.get("habitat").asText();
         String is_legendary = map.get("is_legendary").asText();
 
-        PokemonResponse pokemonResponse = new PokemonResponse(name, description, habitat, is_legendary);
+        PokemonResponse pokemonResponse = new PokemonResponse(name, descriptionTranslated, habitat, is_legendary);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
