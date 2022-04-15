@@ -37,6 +37,9 @@ public class ShakespeareanController {
         JsonNode map = response.getBody();
 
         String description =  map.get("flavor_text_entries").get(0).get("flavor_text").asText();
+        description = description.replace("\n", " ");
+        description = description.replace("\f", " ");
+        System.out.println(map.get("flavor_text_entries").get(0).get("flavor_text"));
         String habitat = map.get("habitat").asText();
         String is_legendary = map.get("is_legendary").asText();
 
@@ -61,6 +64,9 @@ public class ShakespeareanController {
         JsonNode map = response.getBody();
 
         String description =  map.get("flavor_text_entries").get(0).get("flavor_text").asText();
+        description = description.replace("\n", " ");
+        description = description.replace("\f", " ");
+
         String shakespeareanUri = "https://api.funtranslations.com/translate/shakespeare.json?text="+ URLEncoder.encode(description, StandardCharsets.UTF_8);
         ResponseEntity<JsonNode> res = restTemplate.exchange(shakespeareanUri, HttpMethod.POST, null, JsonNode.class);
         JsonNode map2 = res.getBody();
