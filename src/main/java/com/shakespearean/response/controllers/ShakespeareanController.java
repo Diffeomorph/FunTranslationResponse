@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class ShakespeareanController {
 
     @Autowired
-    private PokemonRequest pokemonRequest;
-    private ShakespeareRequest shakespeareRequest;
+    PokemonRequest pokemonRequest;
+    ShakespeareRequest shakespeareRequest;
 
     // Get particular pokemon response
     @GetMapping("/pokemon/{name}")
