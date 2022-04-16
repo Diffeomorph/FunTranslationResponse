@@ -19,7 +19,7 @@ class ShakespeareRequestTest {
     @Test
     void testShakespeareRequest(){
         String actual = shakespeareRequestTest.getShakespeareanTranslation("Spits fire that is hot enough to melt boulders. Known to cause forest fires unintentionally.");
-        String expected = ;
+        String expected = "Spits fire yond is hot enow to melt boulders. Known to cause forest fires unintentionally.";
         assertEquals(actual, expected);
     }
 
