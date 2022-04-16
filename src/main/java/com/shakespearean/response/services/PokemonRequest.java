@@ -3,8 +3,10 @@ package com.shakespearean.response.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class PokemonRequest {
 
     public PokemonRequest(){

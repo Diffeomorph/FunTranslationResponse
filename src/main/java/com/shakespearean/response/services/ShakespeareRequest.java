@@ -3,11 +3,13 @@ package com.shakespearean.response.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+@Service
 public class ShakespeareRequest {
 
     public ShakespeareRequest(){

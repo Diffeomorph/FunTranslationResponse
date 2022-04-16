@@ -42,11 +42,11 @@ public class ShakespeareanController {
         String[] res = pokemonRequest.getPokemonbyName(name);
         String translation = shakespeareRequest.getShakespeareanTranslation(res[1]);
 
-        PokemonResponse pokemonResponse = new PokemonResponse(res[0], translation, res[2], res[3]);
+        PokemonResponse pokemonTranslatedResponse = new PokemonResponse(res[0], translation, res[2], res[3]);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            String json = mapper.writeValueAsString(pokemonResponse);
+            String json = mapper.writeValueAsString(pokemonTranslatedResponse);
             return json;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
