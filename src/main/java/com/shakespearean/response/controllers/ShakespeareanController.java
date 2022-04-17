@@ -17,6 +17,8 @@ public class ShakespeareanController {
 
     @Autowired
     PokemonRequest pokemonRequest;
+
+    @Autowired
     ShakespeareRequest shakespeareRequest;
 
     // Get particular pokemon response
