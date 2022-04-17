@@ -1,20 +1,16 @@
 package com.shakespearean.response.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ShakespeareRequestTest {
+@SpringBootTest
+public class ShakespeareRequestTest {
 
     @Autowired
     ShakespeareRequest shakespeareRequestTest;
-
-    @BeforeEach
-    public void setUp() throws Exception {
-        shakespeareRequestTest = new ShakespeareRequest();
-    }
 
     @Test
     void testShakespeareRequest(){
