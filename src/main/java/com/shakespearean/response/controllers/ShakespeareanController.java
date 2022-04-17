@@ -41,7 +41,6 @@ public class ShakespeareanController {
     String getTranslatedPokemon(@PathVariable String name) throws JsonProcessingException {
         String[] res = pokemonRequest.getPokemonbyName(name);
         String translation = shakespeareRequest.getShakespeareanTranslation(res[1]);
-
         PokemonResponse pokemonTranslatedResponse = new PokemonResponse(res[0], translation, res[2], res[3]);
 
         ObjectMapper mapper = new ObjectMapper();
