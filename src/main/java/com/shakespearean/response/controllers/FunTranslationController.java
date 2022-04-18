@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * The ShakespeareanController, given a pokemon name, returns a "shakespearean" response.
  */
 @RestController
-public class ShakespeareanController {
+public class FunTranslationController {
 
     @Autowired
     PokemonRequest pokemonRequest;

@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 /**
- * ShakespeareRequest, given some text, returns a "shakespearean" translation.
+ * TranslationRequest, given some text, returns a "fun" translation.
  */
 @Service
 public class TranslationRequest {
