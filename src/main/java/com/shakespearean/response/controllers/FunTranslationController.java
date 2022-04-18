@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
- * The ShakespeareanController, given a pokemon name, returns a "shakespearean" response.
+ * The FunTranslationController, given a pokemon name, returns the pokemon description or returns a "fun translation" response.
  */
 @RestController
 public class FunTranslationController {
