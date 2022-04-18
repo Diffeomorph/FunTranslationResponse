@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 
 /**
  * TranslationRequest, given some text, returns a "fun" translation.
