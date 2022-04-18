@@ -1,5 +1,8 @@
 package com.shakespearean.response.services;
 
+/**
+ * PokemonResponse, sets out the structure for the api response to the PokemonRequest class.
+ */
 public class PokemonResponse {
     private String name;
     private String description;

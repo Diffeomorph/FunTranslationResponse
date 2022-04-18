@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * PokemonRequest, given a name, returns desired information about the Pokemon.
+ */
 @Service
 public class PokemonRequest {
 
